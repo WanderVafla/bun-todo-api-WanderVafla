@@ -1,0 +1,19 @@
+{
+  "name": "todo-api",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "start": "bun run index.ts"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.3.14"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "figlet": "^1.11.0",
+    "valibot": "^1.4.1"
+  }
+}

@@ -1,23 +1,38 @@
 import figlet from "figlet";
 import index from "./index.html";
 import { addTodo, getTodos, initBD } from "./db";
-import type { Todo } from "./types";
+import { TodoSchema, type Todo } from "./types";
+import * as v from "valibot";
 
-initBD()
+initBD();
 
 const server = Bun.serve({
   port: 3000,
   routes: {
-    '/': index,
-    '/todos': {
+    "/": index,
+    "/todos": {
       GET: () => Response.json(getTodos()),
-      POST: async req => {
-        const post = await req.json() as Omit<Todo, 'id'>;
-        const postTodo = addTodo(post)
-        return Response.json({...post}, {status: 201})
-      }
+      POST: async (req) => {
+        try {
+          const json = await req.json();
+          const post = v.parse(TodoSchema, json);
+
+          const postTodo = addTodo(post);
+
+          return Response.json({ ...postTodo }, { status: 201 });
+        } catch (error) {
+
+          if (v.isValiError(error)) {
+            const errors = v.flatten(error.issues).nested;
+            return Response.json({ errors }, { status: 400 });
+          }
+
+          console.error("Critical error: ", error);
+          return Response.json({ error: error }, { status: 500 });
+        }
+      },
     },
-  }
-})
+  },
+});
 
 console.log(`Listening on ${server.url}`);

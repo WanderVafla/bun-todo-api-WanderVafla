@@ -8,11 +8,12 @@ const server = Bun.serve({
   port: 3000,
   routes: {
     '/': index,
-    '/figlet': () => {
-      const body = figlet.textSync('Bun!');
-      return new Response(body)
+    '/todos': {
+      GET: () => {
+        const body = figlet.textSync('Bun!');
+        return new Response(body)
+      },
     },
-    '/todos': () => Response.json(getTodos())
   }
 })
 

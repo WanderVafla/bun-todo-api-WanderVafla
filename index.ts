@@ -1,8 +1,8 @@
-import figlet from "figlet";
 import index from "./index.html";
-import { addTodo, getTodos, initBD } from "./db";
-import { TodoSchema, type Todo } from "./types";
+import { initBD } from "./src/sql/db";
+import { TodoSchema } from "./src/types";
 import * as v from "valibot";
+import { addTodo, getTodos } from "./src/sql/querys";
 
 initBD();
 

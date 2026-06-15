@@ -1,6 +1,6 @@
 import figlet from "figlet";
 import index from "./index.html";
-import { initBD } from "./db";
+import { getTodos, initBD } from "./db";
 
 initBD()
 
@@ -11,7 +11,8 @@ const server = Bun.serve({
     '/figlet': () => {
       const body = figlet.textSync('Bun!');
       return new Response(body)
-    }
+    },
+    '/todos': () => Response.json(getTodos())
   }
 })
 

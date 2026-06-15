@@ -1,6 +1,7 @@
 import type { StringLike } from "bun";
 import { Database } from "bun:sqlite";
 import { boolean, title } from "valibot";
+import type { RawTodo, Todo } from "./types";
 
 const db = new Database("mydb.sqlite", { strict: true });
 export function initBD() {
@@ -15,21 +16,7 @@ const query = db.query(`create table if not exists todos (
   const initBD = query.run();
 }
 
-type RawTodo = {
-  id: number;
-  title: string;
-  content: string | null;
-  due_date: string | null;
-  done: 0 | 1;
-};
 
-type Todo = {
-  id: number;
-  title: string;
-  content: string | null;
-  due_date: string | null;
-  done: boolean;
-};
 
 export function getTodos(): Todo[] {
   const rawTodos = db.query<RawTodo, []>(`select * from todos`).all();
@@ -39,4 +26,13 @@ export function getTodos(): Todo[] {
       done: Boolean(todo.done)
     };
   });
+}
+
+export function addTodo(elements: Omit<Todo, 'id'>): Omit<Todo, 'id'> {
+  const query = db.query(`
+      INSERT INTO todos (title, content, due_date, done) VALUES (?, ?, ?, ?)
+    `).run(elements.title, elements.content, elements.due_date, elements.done);
+    console.log(getTodos().length);
+    
+    return {...elements}
 }

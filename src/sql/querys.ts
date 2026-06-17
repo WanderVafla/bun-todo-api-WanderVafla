@@ -41,6 +41,7 @@ export function updateData(id: number, data: Partial<Todo>) {
     `).get({
         id: id
       });
+  
   if (!check_query) {
     throw new Error(errors.SearchError.notFoundId);
   }

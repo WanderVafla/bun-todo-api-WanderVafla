@@ -23,9 +23,4 @@ export const TodoSchema = v.object({
   done: v.fallback(v.boolean(), false),
 });
 
-export const UpdateTodoSchema = v.object({
-  title: v.optional(v.string()),
-  content: v.optional(v.string()),
-  due_date: v.optional(v.string()),
-  done: v.optional(v.boolean()),
-});
+export const UpdateTodoSchema = v.partial(TodoSchema);

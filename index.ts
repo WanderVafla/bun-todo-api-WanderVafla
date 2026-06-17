@@ -54,7 +54,7 @@ const server = Bun.serve({
           }
 
           console.error(error);
-          return Response.json({ error: `Error: ${error}` }, { status: 500 });
+          return Response.json({ error: `${error}` }, { status: 500 });
         }
       },
     },

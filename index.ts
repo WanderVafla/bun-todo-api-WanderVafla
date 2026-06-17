@@ -49,7 +49,7 @@ const server = Bun.serve({
             return Response.json({ errors }, { status: 400 });
           }
 
-          if (error === errors.SearchError.notFoubdId) {
+          if (error === errors.SearchError.notFoundId) {
             return Response.json({ error: error }, { status: 404 });
           }
 

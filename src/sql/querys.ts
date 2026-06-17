@@ -42,7 +42,7 @@ export function updateData(id: number, data: Partial<Todo>) {
         id: id
       });
   if (!check_query) {
-    throw new Error(errors.SearchError.notFoubdId);
+    throw new Error(errors.SearchError.notFoundId);
   }
 
   const query = db.query(`

@@ -1,4 +1,4 @@
-import type { RawTodo, Todo } from "../types";
+import type { RawTodo, Todo } from "../types/todo.types";
 import { db } from "./db";
 import { errors } from "../constants";
 

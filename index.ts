@@ -1,8 +1,8 @@
 import index from "./index.html";
 import { initBD } from "./src/sql/db";
-import { TodoSchema, UpdateTodoSchema } from "./src/shemas/todo.shema";
+import { TodoSchema, UpdateTodoSchema } from "./src/types/todo.shemas";
 import * as v from "valibot";
-import { addTodo, deleteTodo, getTodos, updateData } from "./src/sql/querys";
+import { addTodo, deleteTodo, getTodos, updateData } from "./src/sql/todo.querys";
 import { errors } from "./src/constants";
 
 initBD();

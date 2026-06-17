@@ -1,7 +1,7 @@
 import { object } from "valibot";
 import type { RawTodo, Todo } from "../types";
 import { db } from "./db";
-import { errors } from "../constatns";
+import { errors } from "../constants";
 
 export function getTodos(): Todo[] {
   const rawTodos = db.query<RawTodo, []>(`select * from todos`).all();

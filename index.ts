@@ -1,6 +1,6 @@
 import index from "./index.html";
 import { initBD } from "./src/sql/db";
-import { TodoSchema, UpdateTodoSchema, type Todo } from "./src/types";
+import { TodoSchema, UpdateTodoSchema } from "./src/shemas/todo.shema";
 import * as v from "valibot";
 import { addTodo, deleteTodo, getTodos, updateData } from "./src/sql/querys";
 import { errors } from "./src/constants";
@@ -98,19 +98,6 @@ const server = Bun.serve({
             return new Response(null, { status: 404, headers: corsHeaders });
           }
           return new Response(null, { status: 500, headers: corsHeaders });
-        }
-      },
-      DELETE: async (req) => {
-        const id = req.params.id;
-        
-        try {
-          deleteTodo(Number(id))
-          return new Response(null, { status: 204 })
-        } catch (error) {
-          if (error === errors.QueryError.itemIsNotDeleted) {
-            return new Response(null, {status: 404})
-          }
-          return new Response(null, {status: 500})
         }
       },
     },

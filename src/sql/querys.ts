@@ -1,4 +1,3 @@
-import { object } from "valibot";
 import type { RawTodo, Todo } from "../types";
 import { db } from "./db";
 import { errors } from "../constants";
@@ -32,20 +31,10 @@ export function addTodo(elements: Omit<Todo, "id">): Omit<Todo, "id"> {
 
 export function updateData(id: number, data: Partial<Todo>) {
   const keysData = Object.keys(data);
-  console.log(data);
-
   const setClause = keysData
     .map((keyValue) => `${keyValue} = $${keyValue}`)
     .join(", ");
-  console.log(setClause);
-
-  const variables = Object.entries(data)
-    .map(
-      (keyOrValue) => `${keyOrValue[0]}: "${keyOrValue[1]}"
-                        id: ${id}`,
-    )
-    .join(",\n");
-
+  
   const check_query = db
     .query(`
     SELECT * FROM todos WHERE id = $id
@@ -53,7 +42,7 @@ export function updateData(id: number, data: Partial<Todo>) {
         id: id
       });
   if (!check_query) {
-    return errors.SearchError.notExistId(id);
+    throw new Error(errors.SearchError.notFoubdId);
   }
 
   const query = db.query(`
@@ -62,7 +51,8 @@ export function updateData(id: number, data: Partial<Todo>) {
         ${setClause}
       WHERE
         id = $id
+      RETURNING *
     `);
 
-  query.run({ ...data, id: id });
+  return query.get({ ...data, id: id });
 }

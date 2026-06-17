@@ -3,6 +3,7 @@ import { initBD } from "./src/sql/db";
 import { TodoSchema, UpdateTodoSchema, type Todo } from "./src/types";
 import * as v from "valibot";
 import { addTodo, getTodos, updateData } from "./src/sql/querys";
+import { errors } from "./src/constants";
 
 initBD();
 
@@ -21,7 +22,6 @@ const server = Bun.serve({
 
           return Response.json({ ...postTodo }, { status: 201 });
         } catch (error) {
-
           if (v.isValiError(error)) {
             const errors = v.flatten(error.issues).nested;
             return Response.json({ errors }, { status: 400 });
@@ -33,36 +33,31 @@ const server = Bun.serve({
       },
     },
     "/todos/:id": {
-      PATCH: async req => {
+      PATCH: async (req) => {
         try {
-          const id = req.params.id
+          const id = req.params.id;
 
-          if (!id) {
-            return Response.json({error: "Missing id in request"}, { status: 404 })
-          }
-          
           const json = await req.json();
           const patchData = v.parse(UpdateTodoSchema, json);
-          
-          const item = updateData(Number(req.params.id), { ...patchData })
 
-          if (item && item.error) {
-            return Response.json({error: item.error}, {status: item.status})
-          }
-          
-          return Response.json(req.params.id) 
+          const item = updateData(Number(req.params.id), { ...patchData });
+
+          return Response.json(item);
         } catch (error) {
-
           if (v.isValiError(error)) {
             const errors = v.flatten(error.issues).nested;
             return Response.json({ errors }, { status: 400 });
           }
-          
-          console.error("Critical error: ", error);
-          return Response.json({ status: 500 })
+
+          if (error === errors.SearchError.notFoubdId) {
+            return Response.json({ error: error }, { status: 404 });
+          }
+
+          console.error(error);
+          return Response.json({ error: `Error: ${error}` }, { status: 500 });
         }
-      }
-    }
+      },
+    },
   },
 });
 

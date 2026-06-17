@@ -40,7 +40,7 @@ const server = Bun.serve({
           const json = await req.json();
           const patchData = v.parse(UpdateTodoSchema, json);
 
-          const item = updateData(Number(req.params.id), { ...patchData });
+          const item = updateData(Number(id), { ...patchData });
 
           return Response.json(item);
         } catch (error) {

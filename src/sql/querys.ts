@@ -43,7 +43,7 @@ export function updateData(id: number, data: Partial<Todo>) {
       });
   
   if (!check_query) {
-    throw new Error(errors.SearchError.notFoundId);
+    throw errors.SearchError.notFoundId;
   }
 
   const query = db.query(`

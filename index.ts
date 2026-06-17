@@ -2,7 +2,7 @@ import index from "./index.html";
 import { initBD } from "./src/sql/db";
 import { TodoSchema, UpdateTodoSchema, type Todo } from "./src/types";
 import * as v from "valibot";
-import { addTodo, getTodos, updateData } from "./src/sql/querys";
+import { addTodo, deleteTodo, getTodos, updateData } from "./src/sql/querys";
 import { errors } from "./src/constants";
 
 initBD();
@@ -55,6 +55,19 @@ const server = Bun.serve({
 
           console.error(error);
           return Response.json({ error: `${error}` }, { status: 500 });
+        }
+      },
+      DELETE: async (req) => {
+        const id = req.params.id;
+        
+        try {
+          deleteTodo(Number(id))
+          return new Response(null, { status: 204 })
+        } catch (error) {
+          if (error === errors.QueryError.itemIsNotDeleted) {
+            return new Response(null, {status: 404})
+          }
+          return new Response(null, {status: 500})
         }
       },
     },

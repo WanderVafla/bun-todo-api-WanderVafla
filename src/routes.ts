@@ -1,5 +1,5 @@
 import { errors } from "./constants";
-import { addTodo, deleteTodo, getTodos, updateData } from "./sql/todo.querys";
+import { addTodo, deleteAllTodo, deleteTodo, getTodos, updateData } from "./sql/todo.querys";
 import { TodoSchema, UpdateTodoSchema } from "./types/todo.shemas";
 import * as v from "valibot";
 
@@ -72,6 +72,15 @@ export function deleteRoute(req: Bun.BunRequest) {
     if (error === errors.QueryError.itemIsNotDeleted) {
       return JSONResponse(null, 404);
     }
+    return JSONResponse(error, 500);
+  }
+}
+
+export function deleteAllRoute() {
+  try {
+    deleteAllTodo();
+    return JSONResponse(null, 204);
+  } catch (error) {
     return JSONResponse(error, 500);
   }
 }

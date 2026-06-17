@@ -66,3 +66,12 @@ export function deleteTodo(id: number) {
     throw errors.QueryError.itemIsNotDeleted
   }
 }
+
+export function deleteAllTodo() {
+  const query = db.query(`
+      DELETE FROM todos
+    `).run()
+  if (query.changes === 0) {
+    throw errors.QueryError.itemIsNotDeleted
+  }
+}

@@ -1,6 +1,6 @@
 import index from "./index.html";
 import { initBD } from "./src/sql/db";
-import { deleteRoute, getRoute, optionRoute, patchRoute, postRoute } from "./src/routes";
+import { deleteAllRoute, deleteRoute, getRoute, optionRoute, patchRoute, postRoute } from "./src/routes";
 
 initBD();
 
@@ -17,7 +17,8 @@ const server = Bun.serve({
     "/todos": {
       OPTIONS: () => optionRoute(),
       GET: () => getRoute(),
-      POST: (req) => postRoute(req) 
+      POST: (req) => postRoute(req), 
+      DELETE: () => deleteAllRoute()
     },
     "/todos/:id": {
       OPTIONS: () => optionRoute(),

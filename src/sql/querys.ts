@@ -57,3 +57,12 @@ export function updateData(id: number, data: Partial<Todo>) {
 
   return query.get({ ...data, id: id });
 }
+
+export function deleteTodo(id: number) {
+  const query = db.query(`
+      DELETE FROM todos WHERE id = $id
+    `).run({id: id})
+  if (query.changes === 0) {
+    throw errors.QueryError.itemIsNotDeleted
+  }
+}

@@ -22,3 +22,5 @@ export const TodoSchema = v.object({
   due_date: v.fallback(v.nullable(v.pipe(v.string(), v.isoDate())), null),
   done: v.fallback(v.boolean(), false),
 });
+
+export const UpdateTodoSchema = v.partial(TodoSchema);

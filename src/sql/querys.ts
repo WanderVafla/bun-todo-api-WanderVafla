@@ -1,5 +1,6 @@
 import type { RawTodo, Todo } from "../types";
 import { db } from "./db";
+import { errors } from "../constants";
 
 export function getTodos(): Todo[] {
   const rawTodos = db.query<RawTodo, []>(`select * from todos`).all();
@@ -26,4 +27,33 @@ export function addTodo(elements: Omit<Todo, "id">): Omit<Todo, "id"> {
   }) as Todo;
 
   return { ...insertedTodo, done: Boolean(insertedTodo.done) };
+}
+
+export function updateData(id: number, data: Partial<Todo>) {
+  const keysData = Object.keys(data);
+  const setClause = keysData
+    .map((keyValue) => `${keyValue} = $${keyValue}`)
+    .join(", ");
+  
+  const check_query = db
+    .query(`
+    SELECT * FROM todos WHERE id = $id
+    `).get({
+        id: id
+      });
+  
+  if (!check_query) {
+    throw errors.SearchError.notFoundId;
+  }
+
+  const query = db.query(`
+      UPDATE todos
+      SET
+        ${setClause}
+      WHERE
+        id = $id
+      RETURNING *
+    `);
+
+  return query.get({ ...data, id: id });
 }

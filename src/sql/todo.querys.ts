@@ -1,4 +1,4 @@
-import type { RawTodo, Todo } from "../types";
+import type { RawTodo, Todo } from "../types/todo.types";
 import { db } from "./db";
 import { errors } from "../constants";
 
@@ -62,6 +62,15 @@ export function deleteTodo(id: number) {
   const query = db.query(`
       DELETE FROM todos WHERE id = $id
     `).run({id: id})
+  if (query.changes === 0) {
+    throw errors.QueryError.itemIsNotDeleted
+  }
+}
+
+export function deleteAllTodo() {
+  const query = db.query(`
+      DELETE FROM todos
+    `).run()
   if (query.changes === 0) {
     throw errors.QueryError.itemIsNotDeleted
   }

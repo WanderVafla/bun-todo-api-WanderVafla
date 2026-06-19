@@ -1,4 +1,3 @@
-import index from "./index.html";
 import { initBD } from "./src/sql/db";
 import { deleteAllRoute, deleteRoute, getRoute, optionRoute, patchRoute, postRoute } from "./src/routes";
 
@@ -13,7 +12,7 @@ const corsHeaders = {
 const server = Bun.serve({
   port: 3000,
   routes: {
-    "/": index,
+    "/": new Response("Todo API on Bun"),
     "/todos": {
       OPTIONS: () => optionRoute(),
       GET: () => getRoute(),
